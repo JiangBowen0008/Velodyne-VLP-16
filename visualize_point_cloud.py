@@ -187,6 +187,6 @@ def main(point_cloud_path):
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print __doc__
+        print(__doc__)
         sys.exit(2)
     main(sys.argv[1])

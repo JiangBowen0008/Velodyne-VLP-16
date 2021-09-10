@@ -100,7 +100,7 @@ def unpack(dirs):
         for offset in xrange(0, n, 1223):
             ts = d[offset : offset + 17]
             data = d[offset + 17 : offset + 1223]
-            print ts, len(data)
+            print(ts, len(data))
             timestamp, factory = struct.unpack_from("<IH", data, offset=1200)
             assert factory == 0x2237, hex(factory)  # 0x22=VLP-16, 0x37=Strongest Return
             timestamp = float(ts)
@@ -118,8 +118,8 @@ def unpack(dirs):
                         try:
                             if os.path.exists(path) is False:
                                 os.makedirs(path)
-                        except Exception, e:
-                            print e
+                        except Exception as e:
+                            print(e)
                         if not points:
                             timestamp_str = '%.6f' % time.time()
                         else:
@@ -150,21 +150,21 @@ def save_package(dirs, data_queue):
                 msg = data_queue.get()
                 data = msg['data']
                 ts = msg['time']
-                print ts, len(data), 'queue size: ', data_queue.qsize(), cnt
+                print(ts, len(data), 'queue size: ', data_queue.qsize(), cnt)
                 if fp == None or cnt == 1000000:
                     if fp != None:
                         fp.close()
                     file_fmt = os.path.join(dirs, '%Y-%m-%d_%H%M')
                     path = str(datetime.now().strftime(file_fmt)) + '.bin'
                     logger.info('save to' + path)
-                    print 'save to ', path
+                    print('save to ', path)
                     fp = open(path, 'ab')
                     cnt = 0
                 cnt += 1
                 fp.write('%.6f' % ts)
                 fp.write(data)
-    except KeyboardInterrupt, e:
-        print e
+    except KeyboardInterrupt as e:
+        print(e)
     finally:
         if fp != None:
             fp.close()
@@ -179,15 +179,15 @@ def capture(port, data_queue):
                 if len(data) > 0:
                     assert len(data) == 1206, len(data)
                     data_queue.put({'data': data, 'time': time.time()})
-            except Exception, e:
-                print dir(e), e.message, e.__class__.__name__
+            except Exception as e:
+                print(dir(e), e.message, e.__class__.__name__)
                 traceback.print_exc(e)
-    except KeyboardInterrupt, e:
-        print e
+    except KeyboardInterrupt as e:
+        print(e)
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print __doc__
+        print(__doc__)
         sys.exit(2)
     if sys.argv[1] == 'read':
         top_dir = datetime.now().strftime('%Y-%m-%d_%H%M%S')
