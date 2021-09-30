@@ -97,7 +97,7 @@ def unpack(dirs):
     for x in files:
         d = open(x, 'rb').read()
         n = len(d)
-        for offset in xrange(0, n, 1223):
+        for offset in range(0, n, 1223):
             ts = d[offset : offset + 17]
             data = d[offset + 17 : offset + 1223]
             print(ts, len(data))
@@ -105,10 +105,10 @@ def unpack(dirs):
             assert factory == 0x2237, hex(factory)  # 0x22=VLP-16, 0x37=Strongest Return
             timestamp = float(ts)
             seq_index = 0
-            for offset in xrange(0, 1200, 100):
+            for offset in range(0, 1200, 100):
                 flag, azimuth = struct.unpack_from("<HH", data, offset)
                 assert flag == 0xEEFF, hex(flag)
-                for step in xrange(2):
+                for step in range(2):
                     seq_index += 1
                     azimuth += step
                     azimuth %= ROTATION_MAX_UNITS
@@ -132,7 +132,7 @@ def unpack(dirs):
                     prev_azimuth = azimuth
                     # H-distance (2mm step), B-reflectivity (0
                     arr = struct.unpack_from('<' + "HB" * 16, data, offset + 4 + step * 48)
-                    for i in xrange(NUM_LASERS):
+                    for i in range(NUM_LASERS):
                         time_offset = (55.296 * seq_index + 2.304 * i) / 1000000.0
                         if arr[i * 2] != 0:
                             points.append(calc(arr[i * 2], azimuth, i, timestamp + time_offset))
